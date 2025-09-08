@@ -3,11 +3,12 @@ import React, { createContext, useContext, useReducer } from 'react'
 const AppContext = createContext()
 
 const initialState = {
-  user: {
-    id: 1,
-    email: 'founder@example.com',
-    subscriptionTier: 'Pro',
-    createdAt: '2024-01-15'
+  user: null, // Will be set after authentication
+  loading: {
+    auth: false,
+    enrichment: false,
+    scoring: false,
+    cadences: false
   },
   crmRecords: [
     {
@@ -88,6 +89,16 @@ const initialState = {
 
 function appReducer(state, action) {
   switch (action.type) {
+    case 'SET_USER':
+      return {
+        ...state,
+        user: action.payload
+      }
+    case 'CLEAR_USER':
+      return {
+        ...state,
+        user: null
+      }
     case 'UPDATE_CRM_RECORD':
       return {
         ...state,
@@ -100,10 +111,57 @@ function appReducer(state, action) {
         ...state,
         crmRecords: [...state.crmRecords, action.payload]
       }
+    case 'SET_CRM_RECORDS':
+      return {
+        ...state,
+        crmRecords: action.payload
+      }
+    case 'DELETE_CRM_RECORD':
+      return {
+        ...state,
+        crmRecords: state.crmRecords.filter(record => record.id !== action.payload)
+      }
     case 'START_ENRICHMENT_JOB':
       return {
         ...state,
         enrichmentJobs: [...state.enrichmentJobs, action.payload]
+      }
+    case 'UPDATE_ENRICHMENT_JOB':
+      return {
+        ...state,
+        enrichmentJobs: state.enrichmentJobs.map(job =>
+          job.id === action.payload.id ? { ...job, ...action.payload } : job
+        )
+      }
+    case 'SET_ENRICHMENT_JOBS':
+      return {
+        ...state,
+        enrichmentJobs: action.payload
+      }
+    case 'ADD_FOLLOW_UP_CADENCE':
+      return {
+        ...state,
+        followUpCadences: [...state.followUpCadences, action.payload]
+      }
+    case 'UPDATE_FOLLOW_UP_CADENCE':
+      return {
+        ...state,
+        followUpCadences: state.followUpCadences.map(cadence =>
+          cadence.id === action.payload.id ? { ...cadence, ...action.payload } : cadence
+        )
+      }
+    case 'DELETE_FOLLOW_UP_CADENCE':
+      return {
+        ...state,
+        followUpCadences: state.followUpCadences.filter(cadence => cadence.id !== action.payload)
+      }
+    case 'SET_LOADING':
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          [action.payload.key]: action.payload.value
+        }
       }
     default:
       return state

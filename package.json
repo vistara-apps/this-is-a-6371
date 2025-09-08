@@ -14,7 +14,14 @@
     "react-router-dom": "^6.8.0",
     "lucide-react": "^0.263.1",
     "recharts": "^2.5.0",
-    "@headlessui/react": "^1.7.0"
+    "@headlessui/react": "^1.7.0",
+    "@supabase/supabase-js": "^2.38.0",
+    "@stripe/stripe-js": "^2.1.0",
+    "openai": "^4.20.0",
+    "react-hook-form": "^7.47.0",
+    "react-hot-toast": "^2.4.1",
+    "papaparse": "^5.4.1",
+    "date-fns": "^2.30.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
